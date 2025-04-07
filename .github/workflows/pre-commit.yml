@@ -1,4 +1,4 @@
-name: Run pre-commit on PR
+name: esline
 
 on:
   pull_request:
