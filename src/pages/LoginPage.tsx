@@ -1,8 +1,8 @@
 import Button from '../components/Button';
 import Google from '../assets/google.svg';
 import Icons from '../components/Icons';
-import { signInWithGoogle } from '../services/signInWithGoogle';
 import { JSX } from 'react';
+import { signInWithGoogle } from '../services/singInWithGoogle';
 
 export default function LoginPage(): JSX.Element {
   return (
