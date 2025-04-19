@@ -1,6 +1,6 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { UserCredential, signInWithPopup } from 'firebase/auth';
-import { signInWithGoogle } from '../singInWithGoogle';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { signInWithGoogle } from '../sing-in-with-google';
 
 vi.mock('firebase/auth', async () => {
   const actual =
