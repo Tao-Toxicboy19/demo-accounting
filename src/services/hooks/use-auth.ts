@@ -12,7 +12,7 @@ export function useAuth(): void {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        const { uid, email, displayName, photoURL } = user;
+        const { uid, email, displayName, photoURL }: User = user;
 
         if (previousUidRef.current !== uid) {
           const simplifiedUser: User = { uid, email, displayName, photoURL };

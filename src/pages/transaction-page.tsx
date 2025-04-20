@@ -3,14 +3,22 @@ import { NavigateFunction, useNavigate } from 'react-router';
 import { logout } from '../services/sing-out';
 import { useSelector } from 'react-redux';
 import { authSelector } from '../services/store/features/auth-slice';
+import { useTransaction } from '../services/hooks/use-transaction';
+import dayjs from 'dayjs';
+import HydrateFallback from './hydrate-fallback';
 
 export default function TransactionPage(): JSX.Element {
   const navigate: NavigateFunction = useNavigate();
   const userReducer = useSelector(authSelector);
+  const { data, isPending } = useTransaction(userReducer.user?.uid ?? '');
   const handleLogout = async (): Promise<void> => {
     const res = await logout();
     if (res) navigate('/login');
   };
+
+  if (isPending || !userReducer.user) {
+    return <HydrateFallback />;
+  }
 
   return (
     <div className="container mx-auto mt-10">
@@ -18,7 +26,7 @@ export default function TransactionPage(): JSX.Element {
         <div>
           <h1 className="text-2xl font-bold">Transactions</h1>
           <p className="text-sm text-gray-600">
-            {userReducer.user?.displayName}
+            {userReducer.user.displayName}
           </p>
         </div>
         <button
@@ -33,6 +41,9 @@ export default function TransactionPage(): JSX.Element {
         <thead className="bg-gray-50">
           <tr>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              No.
+            </th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
               Title
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -42,7 +53,10 @@ export default function TransactionPage(): JSX.Element {
               Role
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Email
+              Date
+            </th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Note
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
               Actions
@@ -50,24 +64,28 @@ export default function TransactionPage(): JSX.Element {
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
-          {[1, 2, 3, 4, 5].map((_, index) => (
+          {data?.map((item, index) => (
             <tr key={index}>
               <td className="px-6 py-4 whitespace-nowrap">
-                <div className="text-sm text-gray-900">
-                  Regional Paradigm Technician
-                </div>
-                <div className="text-sm text-gray-500">Optimization</div>
+                <div className="text-sm text-gray-900">{index + 1}</div>
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap">
+                <div className="text-sm text-gray-900">{item.title}</div>
+                {/* <div className="text-sm text-gray-500">Optimization</div> */}
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
                 <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                  Active
+                  {item.type}
                 </span>
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                Admin
+                {item.amount}
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                jane.cooper@example.com
+                {dayjs(item.date).format('DD/MM/YYYY')}
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                {item.note}
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                 <a href="#" className="text-indigo-600 hover:text-indigo-900">

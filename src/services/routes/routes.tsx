@@ -4,12 +4,11 @@ import ErrorPage from '../../pages/error-page';
 import HydrateFallback from '../../pages/hydrate-fallback';
 import TransactionPage from '../../pages/transaction-page';
 import RrotectedRoute from './protected-route';
-import PublicRoute from './public-route';
+import { loginLoader } from '../loaders/auth-loaders';
 
 export const router = createBrowserRouter([
   {
     path: '/authentication',
-    element: <PublicRoute />,
     children: [
       {
         path: 'login',
@@ -18,6 +17,7 @@ export const router = createBrowserRouter([
     ],
     errorElement: <ErrorPage />,
     hydrateFallbackElement: <HydrateFallback />,
+    loader: loginLoader,
   },
   {
     path: '/',
