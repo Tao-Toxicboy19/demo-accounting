@@ -1,33 +1,38 @@
 import clsx from 'clsx';
-import { ButtonHTMLAttributes, JSX, ReactNode } from 'react';
+import { JSX, ReactNode, ElementType, ComponentPropsWithoutRef } from 'react';
 
-type Props = {
+type Props<C extends ElementType> = {
   children?: ReactNode;
   className?: string;
   fullWidth?: boolean;
   startIcon?: ReactNode;
   endIcon?: ReactNode;
-} & ButtonHTMLAttributes<HTMLButtonElement>;
+  component?: C;
+} & ComponentPropsWithoutRef<C>;
 
-export default function Button({
+export default function Button<C extends ElementType = 'button'>({
   children,
   className,
   fullWidth,
   startIcon,
   endIcon,
+  component,
   ...rest
-}: Props): JSX.Element {
+}: Props<C>): JSX.Element {
+  const Component = component || 'button';
+
   return (
-    <div
+    <Component
       className={clsx(
         'flex gap-x-2 items-center border p-2 rounded-lg cursor-pointer transition active:scale-95',
         fullWidth && 'w-full',
         className,
       )}
+      {...rest}
     >
       {startIcon}
-      <button {...rest}>{children}</button>
+      {children}
       {endIcon}
-    </div>
+    </Component>
   );
 }

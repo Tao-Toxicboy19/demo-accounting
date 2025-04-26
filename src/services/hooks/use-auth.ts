@@ -1,27 +1,20 @@
-import { useEffect, useRef } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../../firebase';
-import { useAppDispatch } from '../store/store';
-import { setUser } from '../store/features/auth-slice';
 import { User } from '../types/users-type';
+import { UseQueryResult, useQuery } from '@tanstack/react-query';
 
-export function useAuth(): void {
-  const dispatch = useAppDispatch();
-  const previousUidRef = useRef<string | null>(null);
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        const { uid, email, displayName, photoURL }: User = user;
-
-        if (previousUidRef.current !== uid) {
-          const simplifiedUser: User = { uid, email, displayName, photoURL };
-          dispatch(setUser(simplifiedUser));
-          previousUidRef.current = uid;
-        }
-      }
-    });
-
-    return () => unsubscribe();
-  }, [dispatch]);
-}
+export const useCurrentUser = (): UseQueryResult<User | null, Error> => {
+  return useQuery<User | null>({
+    queryKey: ['currentUser'],
+    queryFn: () =>
+      new Promise<User | null>((resolve) => {
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+          unsubscribe();
+          resolve(user);
+        });
+      }),
+    staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
+    gcTime: 1000 * 60 * 60 * 24,
+  });
+};

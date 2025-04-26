@@ -1,12 +1,16 @@
-import { useSelector } from 'react-redux';
 import { JSX } from 'react';
 import { Navigate, Outlet } from 'react-router';
-import { authSelector } from '../store/features/auth-slice';
+import HydrateFallback from '../../pages/hydrate-fallback';
+import { useCurrentUser } from '../hooks/use-auth';
 
 export default function RrotectedRoute(): JSX.Element {
-  const userReducer = useSelector(authSelector);
+  const { isPending, data } = useCurrentUser();
 
-  if (!userReducer.user) {
+  if (isPending) {
+    return <HydrateFallback />;
+  }
+
+  if (!data) {
     return <Navigate to="/authentication/login" replace />;
   }
 

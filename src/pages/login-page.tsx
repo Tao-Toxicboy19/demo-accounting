@@ -1,16 +1,27 @@
 import { JSX } from 'react';
 import { useNavigate } from 'react-router';
 import Google from '../assets/google.svg';
-import Button from '../components/Button';
-import Icons from '../components/Icons';
 import { signInWithGoogle } from '../services/sing-in-with-google';
+import Button from '../components/button';
+import Icons from '../components/icons';
+import { path } from '../services/routes/route-path';
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function LoginPage(): JSX.Element {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const handleLogin = async (): Promise<void> => {
     const res = await signInWithGoogle();
     if (res) {
-      navigate('/');
+      const { uid, email, displayName, photoURL } = res.user;
+
+      queryClient.setQueryData(['currentUser'], {
+        uid,
+        email,
+        displayName,
+        photoURL,
+      });
+      navigate(path.root);
     }
   };
 

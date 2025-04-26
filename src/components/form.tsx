@@ -1,17 +1,26 @@
 import { useForm } from 'react-hook-form';
 import dayjs from 'dayjs';
 import { JSX } from 'react';
-import { TransactionForm } from '../services/types/transaction-form-type';
 import Textfield from './textfield';
 import Selection from './selection';
+import { useAddTransaction } from '../services/hooks/use-transaction';
+import { useSelector } from 'react-redux';
+import { authSelector } from '../services/store/features/auth-slice';
+import {
+  TransactionForm,
+  UserTransactionForm,
+} from '../services/types/transaction-type';
 
 const options = [
-  { value: 'chocolate', label: 'Chocolate' },
-  { value: 'strawberry', label: 'Strawberry' },
-  { value: 'vanilla', label: 'Vanilla' },
+  { value: 'income', label: 'Income' },
+  { value: 'expense', label: 'Expense' },
+  { value: 'installment', label: 'Installment' },
 ];
 
 export default function Form(): JSX.Element {
+  const { mutate } = useAddTransaction();
+  const userReducer = useSelector(authSelector);
+
   const {
     register,
     handleSubmit,
@@ -24,7 +33,11 @@ export default function Form(): JSX.Element {
   });
 
   const onSubmit = (data: TransactionForm) => {
-    console.log('Submitted data:', data);
+    const payload: UserTransactionForm = {
+      ...data,
+      user: userReducer.user!.uid,
+    };
+    mutate(payload);
   };
 
   return (

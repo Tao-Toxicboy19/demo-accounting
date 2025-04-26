@@ -4,10 +4,12 @@ import { User } from '../../types/users-type';
 
 type AuthState = {
   user: User | null;
+  isLoading: boolean;
 };
 
 const initialState: AuthState = {
   user: null,
+  isLoading: false,
 };
 
 const authSlice = createSlice({
@@ -16,9 +18,11 @@ const authSlice = createSlice({
   reducers: {
     setUser(state, action: PayloadAction<User | null>) {
       state.user = action.payload;
+      state.isLoading = false;
     },
     clearUser(state) {
       state.user = null;
+      state.isLoading = true;
     },
   },
 });
