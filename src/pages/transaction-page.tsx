@@ -6,6 +6,8 @@ import { authSelector } from '../services/store/features/auth-slice';
 import { useTransaction } from '../services/hooks/use-transaction';
 import dayjs from 'dayjs';
 import HydrateFallback from './hydrate-fallback';
+import { path } from '../services/routes/route-path';
+import Form from '../components/form';
 
 export default function TransactionPage(): JSX.Element {
   const navigate: NavigateFunction = useNavigate();
@@ -13,7 +15,7 @@ export default function TransactionPage(): JSX.Element {
   const { data, isPending } = useTransaction(userReducer.user?.uid ?? '');
   const handleLogout = async (): Promise<void> => {
     const res = await logout();
-    if (res) navigate('/login');
+    if (res) navigate(path.auth);
   };
 
   if (isPending || !userReducer.user) {
@@ -35,6 +37,9 @@ export default function TransactionPage(): JSX.Element {
         >
           Logout
         </button>
+      </div>
+      <div>
+        <Form />
       </div>
 
       <table className="min-w-full divide-y divide-gray-200 overflow-x-auto">
@@ -82,7 +87,7 @@ export default function TransactionPage(): JSX.Element {
                 {item.amount}
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                {dayjs(item.date).format('DD/MM/YYYY')}
+                {dayjs(item.createdAt).format('DD/MM/YYYY')}
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                 {item.note}
