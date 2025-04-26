@@ -1,5 +1,9 @@
 export const path = {
   root: '/',
-  login: '/login',
-  auth: '/authentication',
+  auth: {
+    login: '/authentication/login',
+  },
+  transaction: {
+    new: '/new/transaction',
+  },
 };

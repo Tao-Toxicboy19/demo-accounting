@@ -5,12 +5,8 @@ import {
 } from 'firebase/auth';
 import { auth } from '../firebase';
 
-export const signInWithGoogle = async (): Promise<UserCredential | unknown> => {
+export const signInWithGoogle = async (): Promise<UserCredential> => {
   const provider = new GoogleAuthProvider();
-  try {
-    const res = await signInWithPopup(auth, provider);
-    return res;
-  } catch (err: unknown) {
-    return err;
-  }
+  const res = await signInWithPopup(auth, provider);
+  return res;
 };

@@ -7,7 +7,12 @@ export type Transaction = {
   date: Date;
   category: string;
   note: string;
-  createdAt: Date;
-  updatedAt: Date;
-  __v: number;
+};
+
+export type TransactionForm = Omit<Transaction, '_id' | 'user' | 'date'> & {
+  date: string;
+};
+
+export type UserTransactionForm = TransactionForm & {
+  user: string;
 };
