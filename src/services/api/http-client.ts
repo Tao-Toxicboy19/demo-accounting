@@ -14,7 +14,7 @@ axios.interceptors.request.use(async (config: any) => {
   if (!isAbsoluteURLRegex.test(config.url)) {
     config.url = join(apiUrl, config.url);
   }
-  config.timeout = 10000;
+  config.timeout = 3000;
   return config;
 });
 axios.interceptors.request.use(

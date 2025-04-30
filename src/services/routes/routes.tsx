@@ -7,6 +7,7 @@ import RrotectedRoute from './protected-route';
 import { loginLoader } from '../loaders/auth-loaders';
 import NewTransactionPage from '../../pages/new-transaction-page';
 import MainLayout from '../../layouts/main-layout';
+import NewInstallment from '../../pages/new-installment';
 
 export const router = createBrowserRouter([
   {
@@ -36,6 +37,10 @@ export const router = createBrowserRouter([
           {
             path: '/new/transaction',
             element: <NewTransactionPage />,
+          },
+          {
+            path: '/new/installment',
+            element: <NewInstallment />,
           },
         ],
       },
