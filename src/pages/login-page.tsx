@@ -2,10 +2,10 @@ import { JSX } from 'react';
 import { useNavigate } from 'react-router';
 import Google from '../assets/google.svg';
 import { signInWithGoogle } from '../services/sing-in-with-google';
-import Button from '../components/button';
 import Icons from '../components/icons';
 import { path } from '../services/routes/route-path';
 import { useQueryClient } from '@tanstack/react-query';
+import Button from '../components/button';
 
 export default function LoginPage(): JSX.Element {
   const navigate = useNavigate();

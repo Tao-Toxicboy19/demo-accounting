@@ -1,6 +1,6 @@
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../../firebase';
-import { User } from '../types/users-type';
+import { User } from '../types';
 import { UseQueryResult, useQuery } from '@tanstack/react-query';
 
 export const useCurrentUser = (): UseQueryResult<User | null, Error> => {

@@ -6,4 +6,7 @@ export const path = {
   transaction: {
     new: '/new/transaction',
   },
+  installment: {
+    new: '/new/installment',
+  },
 };

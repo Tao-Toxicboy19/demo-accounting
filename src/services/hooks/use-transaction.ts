@@ -5,8 +5,12 @@ import {
   UseQueryResult,
   useQueryClient,
 } from '@tanstack/react-query';
-import { addTransaction, getTransaction } from '../api/transaction';
-import { Transaction, UserTransactionForm } from '../types/transaction-type';
+import { addTransaction, deleteTransaction, getTransaction } from '../api';
+import {
+  IdWithUserTransaction,
+  Transaction,
+  UserTransactionForm,
+} from '../types';
 
 export function useTransaction(
   uid: string,
@@ -27,6 +31,27 @@ export function useAddTransaction(): UseMutationResult<
 
   return useMutation<Transaction, Error, UserTransactionForm>({
     mutationFn: (payload: UserTransactionForm) => addTransaction(payload),
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ['transactions', variables.user],
+      });
+    },
+    onError: (error) => console.log(error),
+    retry: 1,
+  });
+}
+
+export function useDeleteTransaction(): UseMutationResult<
+  void,
+  Error,
+  IdWithUserTransaction
+> {
+  const queryClient = useQueryClient();
+
+  return useMutation<void, Error, IdWithUserTransaction>({
+    mutationFn: async (payload: IdWithUserTransaction) => {
+      await deleteTransaction(payload);
+    },
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({
         queryKey: ['transactions', variables.user],
