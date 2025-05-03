@@ -7,8 +7,11 @@ import RadioGroup from '../components/radio-group';
 import Selection from '../components/selection';
 import Textfield from '../components/textfield';
 import HydrateFallback from '../pages/hydrate-fallback';
-import { useCreateTransaction, useCurrentUser } from '../services/hooks';
-import { useDropdownInstallment } from '../services/hooks/use-installment';
+import {
+  useCreateTransaction,
+  useCurrentUser,
+  useInstallmentDropdown,
+} from '../services/hooks';
 import { path } from '../services/routes/route-path';
 import {
   CreateTransactionPayload,
@@ -22,7 +25,7 @@ export default function FormTransactionPage(): JSX.Element {
   const { isPending, data: user } = useCurrentUser();
   const [transactionType, setTransactionType] =
     useState<TransactionType>('income');
-  const installment = useDropdownInstallment(
+  const installment = useInstallmentDropdown(
     user?.uid || '',
     transactionType === 'installment',
   );

@@ -2,14 +2,18 @@ import { JSX } from 'react';
 import Button from '../components/button';
 import { Link } from 'react-router';
 import { path } from '../services/routes/route-path';
-import { useCurrentUser, useListInstallment } from '../services/hooks';
+import {
+  useCurrentUser,
+  useInstallmentList,
+  useRemoveInstallment,
+} from '../services/hooks';
 import HydrateFallback from './hydrate-fallback';
 import dayjs from 'dayjs';
-import TransactionDelete from '../components/transaction-delete';
+import { InstallmentIdentifier } from '../services/types';
 
 export default function InstallmentPage(): JSX.Element {
   const user = useCurrentUser();
-  const { data, isPending } = useListInstallment(user.data?.uid ?? '');
+  const { data, isPending } = useInstallmentList(user.data?.uid ?? '');
 
   if (isPending || user.isPending || !data) {
     return <HydrateFallback />;
@@ -78,12 +82,33 @@ export default function InstallmentPage(): JSX.Element {
                 {item.note}
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                <TransactionDelete id={item._id} />
+                <InstallmentDelete id={item._id} />
               </td>
             </tr>
           ))}
         </tbody>
       </table>
     </div>
+  );
+}
+
+function InstallmentDelete({ id }: { id: string }): JSX.Element {
+  const { mutate } = useRemoveInstallment();
+  const { data, isPending } = useCurrentUser();
+
+  if (isPending || !data) return <HydrateFallback />;
+
+  const handleDelete = async (): Promise<void> => {
+    const payload: InstallmentIdentifier = {
+      user: data.uid,
+      id,
+    };
+    mutate(payload);
+  };
+
+  return (
+    <a onClick={handleDelete} className="ml-2 text-red-600 hover:text-red-900">
+      Delete
+    </a>
   );
 }

@@ -2,21 +2,21 @@ import dayjs from 'dayjs';
 import { JSX } from 'react';
 import { useForm } from 'react-hook-form';
 import Textfield from '../components/textfield';
-import { useAddInstallment, useCurrentUser } from '../services/hooks';
-import { InstallmentForm, UserWithInstallmentForm } from '../services/types';
+import { useCreateInstallment, useCurrentUser } from '../services/hooks';
 import HydrateFallback from './hydrate-fallback';
 import { Link } from 'react-router';
 import Button from '../components/button';
 import { path } from '../services/routes/route-path';
+import { CreateInstallmentDto, InstallmentFormInput } from '../services/types';
 
 export default function FormInstallment(): JSX.Element {
-  const { mutate } = useAddInstallment();
+  const { mutate } = useCreateInstallment();
   const { isPending, data: user } = useCurrentUser();
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<InstallmentForm>({
+  } = useForm<InstallmentFormInput>({
     defaultValues: {
       startDate: dayjs().format('YYYY-MM-DD'),
     },
@@ -24,8 +24,8 @@ export default function FormInstallment(): JSX.Element {
 
   if (isPending || !user) return <HydrateFallback />;
 
-  const onSubmit = async (data: InstallmentForm) => {
-    const payload: UserWithInstallmentForm = {
+  const onSubmit = async (data: InstallmentFormInput) => {
+    const payload: CreateInstallmentDto = {
       ...data,
       user: user.uid,
     };
