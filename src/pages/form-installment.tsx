@@ -44,12 +44,14 @@ export default function FormInstallment(): JSX.Element {
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div className="flex gap-3">
           <Textfield
+            label="Name"
             error={!!errors?.name}
             placeholder="Name"
             className="w-full"
             {...register('name', { required: true })}
           />
           <Textfield
+            label="Date"
             error={!!errors?.startDate}
             placeholder="Date"
             className="w-full"
@@ -59,16 +61,27 @@ export default function FormInstallment(): JSX.Element {
         </div>
         <div className="flex gap-3">
           <Textfield
+            label="Interest Rate"
             error={!!errors?.interestRate}
             placeholder="Interest Rate"
             type="number"
             className="w-full"
             {...register('interestRate', {
-              required: true,
               valueAsNumber: true,
             })}
           />
           <Textfield
+            label="Total Price"
+            error={!!errors?.totalPrice}
+            placeholder="Total Price"
+            type="number"
+            className="w-full"
+            {...register('totalPrice', {
+              valueAsNumber: true,
+            })}
+          />
+          <Textfield
+            label="Total Month"
             error={!!errors?.totalMonth}
             placeholder="Total Month"
             type="number"
@@ -81,6 +94,7 @@ export default function FormInstallment(): JSX.Element {
         </div>
 
         <Textfield
+          label="Note"
           error={!!errors?.note}
           placeholder="Note"
           {...register('note')}
