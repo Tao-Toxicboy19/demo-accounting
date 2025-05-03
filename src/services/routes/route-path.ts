@@ -4,9 +4,10 @@ export const path = {
     login: '/authentication/login',
   },
   transaction: {
-    new: '/new/transaction',
+    form: '/form/transaction',
   },
   installment: {
-    new: '/new/installment',
+    list: '/list/installment',
+    form: '/form/installment',
   },
 };

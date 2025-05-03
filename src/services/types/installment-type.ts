@@ -4,9 +4,9 @@ export type Installment = {
   startDate: Date;
   interestRate: number;
   totalMonth: number;
+  paidMonths: number;
+  totalPrice: number;
   _id: string;
-  createdAt: Date;
-  updatedAt: Date;
   note: string;
 };
 

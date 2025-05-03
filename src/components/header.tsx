@@ -20,32 +20,21 @@ export default function Header(): JSX.Element {
   if (isPending) return <HydrateFallback />;
 
   return (
-    <div className="container mx-auto mt-3">
-      <div className="flex justify-between items-center mb-6">
-        <div className="flex items-center">
+    <div className="bg-orange-200">
+      <div className="container mx-auto flex items-center justify-between min-h-[64px]">
+        <div className="flex items-center space-x-3">
           <div>
             <h1 className="text-2xl font-bold">Transactions</h1>
             <p className="text-sm text-gray-600">{data?.displayName}</p>
           </div>
-          <Button className="h-10 ml-3" component={Link} to={path.root}>
-            Back
-          </Button>
-          <Button
-            className="h-10 ml-3"
-            component={Link}
-            to={path.transaction.new}
-          >
-            Transaction
-          </Button>
-          <Button
-            className="h-10 ml-3"
-            component={Link}
-            to={path.installment.new}
-          >
-            Installment
-          </Button>
+          <nav className="flex items-center space-x-3 text-sm font-medium ml-3">
+            <Link to={path.root}>Transaction</Link>
+            <Link to={path.installment.list}>Installment</Link>
+          </nav>
         </div>
-        <Button onClick={handleLogout}>Logout</Button>
+        <Button onClick={handleLogout} className="h-10">
+          Logout
+        </Button>
       </div>
     </div>
   );
