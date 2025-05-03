@@ -1,60 +1,95 @@
 import {
-  useMutation,
-  UseMutationResult,
   useQuery,
+  useMutation,
   useQueryClient,
   UseQueryResult,
+  UseMutationResult,
 } from '@tanstack/react-query';
 import {
-  addInstallment,
-  getDropdownInstallment,
-  getListInstallment,
+  createInstallment,
+  fetchInstallmentList,
+  fetchInstallmentOptions,
+  removeInstallment,
 } from '../api';
 import {
-  Installment,
-  InstallmentWithLabelValue,
-  UserWithInstallmentForm,
+  InstallmentEntity,
+  InstallmentOption,
+  CreateInstallmentDto,
+  InstallmentIdentifier,
 } from '../types';
 
-export function useDropdownInstallment(
-  uid: string,
-  enabled: boolean,
-): UseQueryResult<InstallmentWithLabelValue[], Error> {
-  return useQuery<InstallmentWithLabelValue[], Error>({
-    queryKey: ['installment-dropdown', uid],
-    queryFn: () => getDropdownInstallment(uid),
-    enabled: !!uid && enabled,
+// 🔑 Query Keys
+const INSTALLMENT_KEYS = {
+  dropdown: (userId: string) => ['installment-dropdown', userId],
+  list: (userId: string) => ['installment-list', userId],
+};
+
+export function useInstallmentDropdown(
+  userId: string,
+  enabled = true,
+): UseQueryResult<InstallmentOption[], Error> {
+  return useQuery({
+    queryKey: INSTALLMENT_KEYS.dropdown(userId),
+    queryFn: () => fetchInstallmentOptions(userId),
+    enabled: Boolean(userId) && enabled,
   });
 }
 
-export function useAddInstallment(): UseMutationResult<
+export function useInstallmentList(
+  userId: string,
+): UseQueryResult<InstallmentEntity[], Error> {
+  return useQuery({
+    queryKey: INSTALLMENT_KEYS.list(userId),
+    queryFn: () => fetchInstallmentList(userId),
+    enabled: Boolean(userId),
+  });
+}
+
+export function useCreateInstallment(): UseMutationResult<
   { id: string },
   Error,
-  UserWithInstallmentForm
+  CreateInstallmentDto
 > {
   const queryClient = useQueryClient();
 
-  return useMutation<{ id: string }, Error, UserWithInstallmentForm>({
-    mutationFn: (payload: UserWithInstallmentForm) => addInstallment(payload),
+  return useMutation({
+    mutationFn: createInstallment,
     onSuccess: (_, variables) => {
+      const userId = variables.user;
       queryClient.invalidateQueries({
-        queryKey: ['installment-dropdown', variables.user],
+        queryKey: INSTALLMENT_KEYS.dropdown(userId),
       });
       queryClient.invalidateQueries({
-        queryKey: ['installment-list', variables.user],
+        queryKey: INSTALLMENT_KEYS.list(userId),
       });
     },
-    onError: (error) => console.log(error),
+    onError: (error) => {
+      console.error('CreateInstallment error:', error);
+    },
     retry: 1,
   });
 }
 
-export function useListInstallment(
-  uid: string,
-): UseQueryResult<Installment[], Error> {
-  return useQuery<Installment[], Error>({
-    queryKey: ['installment-list', uid],
-    queryFn: () => getListInstallment(uid),
-    enabled: !!uid,
+export function useRemoveInstallment(): UseMutationResult<
+  void,
+  Error,
+  InstallmentIdentifier
+> {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: removeInstallment,
+    onSuccess: (_, { user }) => {
+      const userId = user;
+      queryClient.invalidateQueries({
+        queryKey: INSTALLMENT_KEYS.dropdown(userId),
+      });
+      queryClient.invalidateQueries({
+        queryKey: INSTALLMENT_KEYS.list(userId),
+      });
+    },
+    onError: (error) => {
+      console.error('Failed to delete transaction:', error);
+    },
   });
 }

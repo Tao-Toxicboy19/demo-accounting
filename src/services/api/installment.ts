@@ -1,37 +1,46 @@
 import {
-  Installment,
-  InstallmentWithLabelValue,
-  UserWithInstallmentForm,
+  InstallmentEntity,
+  InstallmentOption,
+  CreateInstallmentDto,
+  InstallmentIdentifier,
 } from '../types';
 import { httpClient } from './http-client';
 
-export async function getDropdownInstallment(
-  userId: string,
-): Promise<InstallmentWithLabelValue[]> {
-  const res = await httpClient.post<InstallmentWithLabelValue[]>(
-    'installments/dropdown',
-    {
-      user: userId,
-    },
-  );
-  return res.data;
-}
+const ENDPOINTS = {
+  DROPDOWN: 'installments/dropdown',
+  CREATE: 'installments/create',
+  LIST: 'installments/list',
+  DELETE: 'installments/delete',
+};
 
-export async function addInstallment(
-  payload: UserWithInstallmentForm,
-): Promise<{ id: string }> {
-  const res = await httpClient.post<{ id: string }>(
-    'installments/create',
-    payload,
-  );
-  return res.data;
-}
-
-export async function getListInstallment(
+export async function fetchInstallmentOptions(
   userId: string,
-): Promise<Installment[]> {
-  const res = await httpClient.post<Installment[]>('installments/list', {
+): Promise<InstallmentOption[]> {
+  const res = await httpClient.post<InstallmentOption[]>(ENDPOINTS.DROPDOWN, {
     user: userId,
   });
+  return res.data;
+}
+
+export async function createInstallment(
+  payload: CreateInstallmentDto,
+): Promise<{ id: string }> {
+  const res = await httpClient.post<{ id: string }>(ENDPOINTS.CREATE, payload);
+  return res.data;
+}
+
+export async function fetchInstallmentList(
+  userId: string,
+): Promise<InstallmentEntity[]> {
+  const res = await httpClient.post<InstallmentEntity[]>(ENDPOINTS.LIST, {
+    user: userId,
+  });
+  return res.data;
+}
+
+export async function removeInstallment(
+  payload: InstallmentIdentifier,
+): Promise<void> {
+  const res = await httpClient.post<void>(ENDPOINTS.DELETE, payload);
   return res.data;
 }

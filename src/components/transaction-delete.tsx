@@ -1,20 +1,20 @@
 import { JSX } from 'react';
-import { useCurrentUser, useDeleteTransaction } from '../services/hooks';
+import { useCurrentUser, useRemoveTransaction } from '../services/hooks';
 import HydrateFallback from '../pages/hydrate-fallback';
-import { IdWithUserTransaction } from '../services/types';
+import { TransactionIdentifier } from '../services/types';
 
 type Props = {
   id: string;
 };
 
 export default function TransactionDelete({ id }: Props): JSX.Element {
-  const { mutate } = useDeleteTransaction();
+  const { mutate } = useRemoveTransaction();
   const { data, isPending } = useCurrentUser();
 
   if (isPending || !data) return <HydrateFallback />;
 
   const handleDeleteTransaction = async (): Promise<void> => {
-    const payload: IdWithUserTransaction = {
+    const payload: TransactionIdentifier = {
       user: data.uid,
       id,
     };
