@@ -6,7 +6,7 @@ export default function MainLayout(): JSX.Element {
   return (
     <div>
       <Header />
-      <main className="container mx-auto mt-10">
+      <main className="container mx-auto mt-3">
         <Outlet />
       </main>
     </div>

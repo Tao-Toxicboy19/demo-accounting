@@ -5,9 +5,10 @@ import HydrateFallback from '../../pages/hydrate-fallback';
 import TransactionPage from '../../pages/transaction-page';
 import RrotectedRoute from './protected-route';
 import { loginLoader } from '../loaders/auth-loaders';
-import NewTransactionPage from '../../pages/new-transaction-page';
 import MainLayout from '../../layouts/main-layout';
-import NewInstallment from '../../pages/new-installment';
+import FormTransactionPage from '../../pages/form-transaction-page';
+import FormInstallment from '../../pages/form-installment';
+import InstallmentPage from '../../pages/installment-page';
 
 export const router = createBrowserRouter([
   {
@@ -35,12 +36,16 @@ export const router = createBrowserRouter([
             element: <TransactionPage />,
           },
           {
-            path: '/new/transaction',
-            element: <NewTransactionPage />,
+            path: '/form/transaction',
+            element: <FormTransactionPage />,
           },
           {
-            path: '/new/installment',
-            element: <NewInstallment />,
+            path: '/list/installment',
+            element: <InstallmentPage />,
+          },
+          {
+            path: '/form/installment',
+            element: <FormInstallment />,
           },
         ],
       },

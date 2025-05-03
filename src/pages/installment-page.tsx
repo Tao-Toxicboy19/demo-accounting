@@ -1,16 +1,15 @@
 import { JSX } from 'react';
-import dayjs from 'dayjs';
-import HydrateFallback from './hydrate-fallback';
-import { useCurrentUser, useTransaction } from '../services/hooks';
-import TransactionDelete from '../components/transaction-delete';
-import clsx from 'clsx';
 import Button from '../components/button';
 import { Link } from 'react-router';
 import { path } from '../services/routes/route-path';
+import { useCurrentUser, useListInstallment } from '../services/hooks';
+import HydrateFallback from './hydrate-fallback';
+import dayjs from 'dayjs';
+import TransactionDelete from '../components/transaction-delete';
 
-export default function TransactionPage(): JSX.Element {
+export default function InstallmentPage(): JSX.Element {
   const user = useCurrentUser();
-  const { data, isPending } = useTransaction(user.data?.uid ?? '');
+  const { data, isPending } = useListInstallment(user.data?.uid ?? '');
 
   if (isPending || user.isPending || !data) {
     return <HydrateFallback />;
@@ -20,10 +19,10 @@ export default function TransactionPage(): JSX.Element {
     <div>
       <Button
         component={Link}
-        to={path.transaction.form}
+        to={path.installment.form}
         className="mb-3 w-fit"
       >
-        New Transaction
+        New Installment
       </Button>
       <table className="min-w-full divide-y divide-gray-200 overflow-x-auto">
         <thead className="bg-gray-50">
@@ -32,13 +31,16 @@ export default function TransactionPage(): JSX.Element {
               No.
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Title
+              Name
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Status
+              Interest Rate
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Amount
+              Paid/Total Months
+            </th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Total Price
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
               Date
@@ -58,27 +60,19 @@ export default function TransactionPage(): JSX.Element {
                 <div className="text-sm text-gray-900">{index + 1}</div>
               </td>
               <td className="px-6 py-4 whitespace-nowrap truncate max-w-3xs">
-                <div className="text-sm text-gray-900">{item.title}</div>
-                {/* <div className="text-sm text-gray-500">Optimization</div> */}
+                <div className="text-sm text-gray-900">{item.name}</div>
               </td>
-              <td className="px-6 py-4 whitespace-nowrap">
-                <span
-                  className={clsx(
-                    item.type === 'income' && 'bg-green-100 text-green-800',
-                    item.type === 'expense' && 'bg-red-100 text-red-800',
-                    item.type === 'installment' &&
-                      'bg-orange-100 text-orange-800',
-                    'px-2 inline-flex text-xs leading-5 font-semibold rounded-full',
-                  )}
-                >
-                  {item.type}
-                </span>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
+                {item.interestRate}
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
+                {item.paidMonths}/{item.totalMonth}
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
+                {item.totalPrice}
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                {item.amount}
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                {dayjs(item.date).format('DD/MM/YYYY')}
+                {dayjs(item.startDate).format('DD/MM/YYYY')}
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                 {item.note}

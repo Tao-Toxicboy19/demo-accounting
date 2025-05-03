@@ -24,55 +24,59 @@ export default function Selection({
   control,
   name,
   placeholder,
+  label,
   className,
   options = [], // fallback empty array
   rules,
 }: Props): JSX.Element {
   return (
-    <Controller
-      control={control}
-      name={name}
-      rules={rules}
-      render={({ field, fieldState }) => (
-        <Select
-          className={clsx(className)}
-          options={options}
-          value={
-            (options as OptionType[]).find((c) => c.value === field.value) ||
-            null
-          }
-          onChange={(val) => field.onChange((val as OptionType)?.value)}
-          placeholder={placeholder}
-          loadingMessage={() => 'Loading...'}
-          noOptionsMessage={() => (
-            <button
-              type="button"
-              onMouseDown={(e) => {
-                e.preventDefault();
-              }}
-              className="text-blue-500 hover:underline w-full text-left px-2 py-1"
-            >
-              + Add new Installment
-            </button>
-          )}
-          styles={{
-            control: (baseStyles) => ({
-              ...baseStyles,
-              borderColor: fieldState.error
-                ? '#fb2c36'
-                : baseStyles.borderColor,
-              '&:hover': {
+    <div className={clsx(className)}>
+      <label className="block text-gray-700 font-bold mb-2">{label}</label>
+      <Controller
+        control={control}
+        name={name}
+        rules={rules}
+        render={({ field, fieldState }) => (
+          <Select
+            className={clsx(className)}
+            options={options}
+            value={
+              (options as OptionType[]).find((c) => c.value === field.value) ||
+              null
+            }
+            onChange={(val) => field.onChange((val as OptionType)?.value)}
+            placeholder={placeholder}
+            loadingMessage={() => 'Loading...'}
+            noOptionsMessage={() => (
+              <button
+                type="button"
+                onMouseDown={(e) => {
+                  e.preventDefault();
+                }}
+                className="text-blue-500 hover:underline w-full text-left px-2 py-1"
+              >
+                + Add new Installment
+              </button>
+            )}
+            styles={{
+              control: (baseStyles) => ({
+                ...baseStyles,
                 borderColor: fieldState.error
                   ? '#fb2c36'
                   : baseStyles.borderColor,
-              },
-              boxShadow: fieldState.error
-                ? '0 0 0 1px #fb2c36'
-                : baseStyles.boxShadow,
-            }),
-          }}
-        />
-      )}
-    />
+                '&:hover': {
+                  borderColor: fieldState.error
+                    ? '#fb2c36'
+                    : baseStyles.borderColor,
+                },
+                boxShadow: fieldState.error
+                  ? '0 0 0 1px #fb2c36'
+                  : baseStyles.boxShadow,
+              }),
+            }}
+          />
+        )}
+      />
+    </div>
   );
 }
