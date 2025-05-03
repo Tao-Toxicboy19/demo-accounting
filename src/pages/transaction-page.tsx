@@ -1,7 +1,7 @@
 import { JSX } from 'react';
 import dayjs from 'dayjs';
 import HydrateFallback from './hydrate-fallback';
-import { useCurrentUser, useTransaction } from '../services/hooks';
+import { useCurrentUser, useTransactionsByUser } from '../services/hooks';
 import TransactionDelete from '../components/transaction-delete';
 import clsx from 'clsx';
 import Button from '../components/button';
@@ -10,7 +10,7 @@ import { path } from '../services/routes/route-path';
 
 export default function TransactionPage(): JSX.Element {
   const user = useCurrentUser();
-  const { data, isPending } = useTransaction(user.data?.uid ?? '');
+  const { data, isPending } = useTransactionsByUser(user.data?.uid ?? '');
 
   if (isPending || user.isPending || !data) {
     return <HydrateFallback />;

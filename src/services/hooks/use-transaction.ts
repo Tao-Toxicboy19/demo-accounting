@@ -5,57 +5,66 @@ import {
   UseQueryResult,
   useQueryClient,
 } from '@tanstack/react-query';
-import { addTransaction, deleteTransaction, getTransaction } from '../api';
 import {
-  IdWithUserTransaction,
-  Transaction,
-  UserTransactionForm,
+  fetchTransactionsByUser,
+  createTransaction,
+  removeTransaction,
+} from '../api';
+import {
+  CreateTransactionPayload,
+  TransactionEntity,
+  TransactionIdentifier,
 } from '../types';
 
-export function useTransaction(
-  uid: string,
-): UseQueryResult<Transaction[], Error> {
-  return useQuery<Transaction[], Error>({
-    queryKey: ['transactions', uid],
-    queryFn: () => getTransaction(uid),
-    enabled: !!uid,
+const TRANSACTION_QUERY_KEY = 'transactions';
+
+export function useTransactionsByUser(
+  userId: string,
+): UseQueryResult<TransactionEntity[], Error> {
+  return useQuery({
+    queryKey: [TRANSACTION_QUERY_KEY, userId],
+    queryFn: () => fetchTransactionsByUser(userId),
+    enabled: Boolean(userId),
   });
 }
 
-export function useAddTransaction(): UseMutationResult<
-  Transaction,
+export function useCreateTransaction(): UseMutationResult<
+  TransactionEntity,
   Error,
-  UserTransactionForm
+  CreateTransactionPayload
 > {
   const queryClient = useQueryClient();
 
-  return useMutation<Transaction, Error, UserTransactionForm>({
-    mutationFn: (payload: UserTransactionForm) => addTransaction(payload),
-    onSuccess: (_, variables) => {
+  return useMutation({
+    mutationFn: createTransaction,
+    onSuccess: (_, { user }) => {
       queryClient.invalidateQueries({
-        queryKey: ['transactions', variables.user],
+        queryKey: [TRANSACTION_QUERY_KEY, user],
       });
     },
-    onError: (error) => console.log(error),
+    onError: (error) => {
+      console.error('Failed to add transaction:', error);
+    },
     retry: 1,
   });
 }
 
-export function useDeleteTransaction(): UseMutationResult<
+export function useRemoveTransaction(): UseMutationResult<
   void,
   Error,
-  IdWithUserTransaction
+  TransactionIdentifier
 > {
   const queryClient = useQueryClient();
 
-  return useMutation<void, Error, IdWithUserTransaction>({
-    mutationFn: async (payload: IdWithUserTransaction) => {
-      await deleteTransaction(payload);
-    },
-    onSuccess: (_, variables) => {
+  return useMutation({
+    mutationFn: removeTransaction,
+    onSuccess: (_, { user }) => {
       queryClient.invalidateQueries({
-        queryKey: ['transactions', variables.user],
+        queryKey: [TRANSACTION_QUERY_KEY, user],
       });
+    },
+    onError: (error) => {
+      console.error('Failed to delete transaction:', error);
     },
   });
 }

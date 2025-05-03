@@ -7,42 +7,18 @@ import RadioGroup from '../components/radio-group';
 import Selection from '../components/selection';
 import Textfield from '../components/textfield';
 import HydrateFallback from '../pages/hydrate-fallback';
-import { useAddTransaction, useCurrentUser } from '../services/hooks';
+import { useCreateTransaction, useCurrentUser } from '../services/hooks';
 import { useDropdownInstallment } from '../services/hooks/use-installment';
 import { path } from '../services/routes/route-path';
 import {
-  TransactionForm,
+  CreateTransactionPayload,
+  TransactionFormInput,
   TransactionType,
-  UserTransactionForm,
-} from '../services/types/transaction-type';
-
-const categories = [
-  { value: 'snack', label: 'ขนม' },
-  { value: 'drink', label: 'เครื่องดื่ม' },
-  { value: 'food', label: 'อาหาร' },
-  { value: 'transportation', label: 'ค่าเดินทาง' },
-  { value: 'shopping', label: 'ช้อปปิ้ง' },
-  { value: 'entertainment', label: 'ความบันเทิง' },
-  { value: 'bill', label: 'ค่าสาธารณูปโภค' },
-  { value: 'healthcare', label: 'สุขภาพ' },
-  { value: 'education', label: 'การศึกษา' },
-  { value: 'other_expense', label: 'รายจ่ายอื่น ๆ' },
-  { value: 'salary', label: 'เงินเดือน' },
-  { value: 'freelance', label: 'งานฟรีแลนซ์' },
-  { value: 'gift', label: 'ของขวัญ' },
-  { value: 'refund', label: 'เงินคืน' },
-  { value: 'investment', label: 'ผลตอบแทนการลงทุน' },
-  { value: 'other_income', label: 'รายรับอื่น ๆ' },
-  { value: 'credit_card', label: 'ผ่อนบัตรเครดิต' },
-  { value: 'car_loan', label: 'ผ่อนรถยนต์' },
-  { value: 'home_loan', label: 'ผ่อนบ้าน' },
-  { value: 'phone', label: 'ผ่อนมือถือ' },
-  { value: 'appliance', label: 'ผ่อนเครื่องใช้ไฟฟ้า' },
-  { value: 'other_installment', label: 'ผ่อนชำระอื่น ๆ' },
-];
+} from '../services/types';
+import { categories } from '../services/constants';
 
 export default function FormTransactionPage(): JSX.Element {
-  const { mutate } = useAddTransaction();
+  const { mutate } = useCreateTransaction();
   const { isPending, data: user } = useCurrentUser();
   const [transactionType, setTransactionType] =
     useState<TransactionType>('income');
@@ -58,7 +34,7 @@ export default function FormTransactionPage(): JSX.Element {
     watch,
     setValue,
     formState: { errors, isSubmitting },
-  } = useForm<TransactionForm>({
+  } = useForm<TransactionFormInput>({
     defaultValues: {
       date: dayjs().format('YYYY-MM-DD'),
     },
@@ -80,8 +56,8 @@ export default function FormTransactionPage(): JSX.Element {
     }
   }, [installmentValue, transactionType, installment.data, setValue]);
 
-  const onSubmit = async (data: TransactionForm) => {
-    const payload: UserTransactionForm = {
+  const onSubmit = async (data: TransactionFormInput) => {
+    const payload: CreateTransactionPayload = {
       ...data,
       user: user.uid,
     };

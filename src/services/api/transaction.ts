@@ -1,27 +1,38 @@
 import {
-  IdWithUserTransaction,
-  Transaction,
-  UserTransactionForm,
-} from '../types/transaction-type';
+  CreateTransactionPayload,
+  TransactionEntity,
+  TransactionIdentifier,
+} from '../types';
 import { httpClient } from './http-client';
 
-export async function getTransaction(userId: string): Promise<Transaction[]> {
-  const res = await httpClient.post<Transaction[]>('transaction/by/user', {
+const ENDPOINT = {
+  LIST: 'transactions/list',
+  CREATE: 'transactions/create',
+  DELETE: 'transactions/delete',
+};
+
+export async function fetchTransactionsByUser(
+  userId: string,
+): Promise<TransactionEntity[]> {
+  const res = await httpClient.post<TransactionEntity[]>(ENDPOINT.LIST, {
     user: userId,
   });
   return res.data;
 }
 
-export async function addTransaction(
-  payload: UserTransactionForm,
-): Promise<Transaction> {
-  const res = await httpClient.post<Transaction>('transaction/create', payload);
+export async function createTransaction(
+  payload: CreateTransactionPayload,
+): Promise<TransactionEntity> {
+  const res = await httpClient.post<TransactionEntity>(
+    ENDPOINT.CREATE,
+    payload,
+  );
   return res.data;
 }
 
-export async function deleteTransaction(
-  payload: IdWithUserTransaction,
+export async function removeTransaction(
+  payload: TransactionIdentifier,
 ): Promise<void> {
-  const res = await httpClient.post<void>('transaction/delete', payload);
+  const res = await httpClient.post<void>(ENDPOINT.DELETE, payload);
   return res.data;
 }
