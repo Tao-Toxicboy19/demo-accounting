@@ -1,5 +1,6 @@
 import {
   CreateTransactionPayload,
+  IncomeAndExpenseSummary,
   TransactionEntity,
   TransactionIdentifier,
 } from '../types';
@@ -9,6 +10,7 @@ const ENDPOINT = {
   LIST: 'transactions/list',
   CREATE: 'transactions/create',
   DELETE: 'transactions/delete',
+  SUMMARY: 'transactions/summary',
 };
 
 export async function fetchTransactionsByUser(
@@ -34,5 +36,14 @@ export async function removeTransaction(
   payload: TransactionIdentifier,
 ): Promise<void> {
   const res = await httpClient.post<void>(ENDPOINT.DELETE, payload);
+  return res.data;
+}
+
+export async function getIncomeAndExpenseSummary(
+  userId: string,
+): Promise<IncomeAndExpenseSummary> {
+  const res = await httpClient.post<IncomeAndExpenseSummary>(ENDPOINT.SUMMARY, {
+    user: userId,
+  });
   return res.data;
 }
