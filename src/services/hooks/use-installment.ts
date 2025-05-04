@@ -7,18 +7,17 @@ import {
 } from '@tanstack/react-query';
 import {
   createInstallment,
-  fetchInstallmentList,
+  fetchInstallmentByUser,
   fetchInstallmentOptions,
   removeInstallment,
 } from '../api';
 import {
   InstallmentEntity,
   InstallmentOption,
-  CreateInstallmentDto,
+  CreateInstallmentPayload,
   InstallmentIdentifier,
 } from '../types';
 
-// 🔑 Query Keys
 const INSTALLMENT_KEYS = {
   dropdown: (userId: string) => ['installment-dropdown', userId],
   list: (userId: string) => ['installment-list', userId],
@@ -35,12 +34,12 @@ export function useInstallmentDropdown(
   });
 }
 
-export function useInstallmentList(
+export function useInstallmentByUser(
   userId: string,
 ): UseQueryResult<InstallmentEntity[], Error> {
   return useQuery({
     queryKey: INSTALLMENT_KEYS.list(userId),
-    queryFn: () => fetchInstallmentList(userId),
+    queryFn: () => fetchInstallmentByUser(userId),
     enabled: Boolean(userId),
   });
 }
@@ -48,7 +47,7 @@ export function useInstallmentList(
 export function useCreateInstallment(): UseMutationResult<
   { id: string },
   Error,
-  CreateInstallmentDto
+  CreateInstallmentPayload
 > {
   const queryClient = useQueryClient();
 

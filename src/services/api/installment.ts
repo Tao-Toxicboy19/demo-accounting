@@ -1,7 +1,7 @@
 import {
   InstallmentEntity,
   InstallmentOption,
-  CreateInstallmentDto,
+  CreateInstallmentPayload,
   InstallmentIdentifier,
 } from '../types';
 import { httpClient } from './http-client';
@@ -23,13 +23,13 @@ export async function fetchInstallmentOptions(
 }
 
 export async function createInstallment(
-  payload: CreateInstallmentDto,
+  payload: CreateInstallmentPayload,
 ): Promise<{ id: string }> {
   const res = await httpClient.post<{ id: string }>(ENDPOINTS.CREATE, payload);
   return res.data;
 }
 
-export async function fetchInstallmentList(
+export async function fetchInstallmentByUser(
   userId: string,
 ): Promise<InstallmentEntity[]> {
   const res = await httpClient.post<InstallmentEntity[]>(ENDPOINTS.LIST, {

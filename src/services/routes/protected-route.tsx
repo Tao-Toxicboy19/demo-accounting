@@ -1,16 +1,11 @@
 import { JSX } from 'react';
 import { Navigate, Outlet } from 'react-router';
-import HydrateFallback from '../../pages/hydrate-fallback';
-import { useCurrentUser } from '../hooks/use-auth';
+import { useAuthUser } from '../hooks/use-auth-user';
 
 export default function RrotectedRoute(): JSX.Element {
-  const { isPending, data } = useCurrentUser();
+  const { uid } = useAuthUser();
 
-  if (isPending) {
-    return <HydrateFallback />;
-  }
-
-  if (!data) {
+  if (uid == '') {
     return <Navigate to="/authentication/login" replace />;
   }
 

@@ -1,14 +1,14 @@
 import { createBrowserRouter, Outlet } from 'react-router-dom';
 import LoginPage from '../../pages/login-page';
-import ErrorPage from '../../pages/error-page';
 import HydrateFallback from '../../pages/hydrate-fallback';
 import TransactionPage from '../../pages/transaction-page';
 import RrotectedRoute from './protected-route';
 import { loginLoader } from '../loaders/auth-loaders';
-import MainLayout from '../../layouts/main-layout';
-import FormTransactionPage from '../../pages/form-transaction-page';
-import FormInstallment from '../../pages/form-installment';
+import { path } from './route-path';
+import DashboardPage from '../../pages/dashboard-page';
+import AppLayout from '../../layouts/app-layout';
 import InstallmentPage from '../../pages/installment-page';
+import NotFound from '../../pages/not-found';
 
 export const router = createBrowserRouter([
   {
@@ -20,41 +20,45 @@ export const router = createBrowserRouter([
         element: <LoginPage />,
       },
     ],
-    errorElement: <ErrorPage />,
+    errorElement: <NotFound />,
     hydrateFallbackElement: <HydrateFallback />,
     loader: loginLoader,
   },
   {
-    path: '/',
+    path: path.root,
     element: <RrotectedRoute />,
     children: [
       {
-        element: <MainLayout />,
+        element: <AppLayout />,
         children: [
           {
             index: true,
+            element: <DashboardPage />,
+          },
+          {
+            path: path.transaction.list,
             element: <TransactionPage />,
           },
+          // {
+          //   path: path.transaction.form,
+          //   element: <FormTransactionPage />,
+          // },
           {
-            path: '/form/transaction',
-            element: <FormTransactionPage />,
-          },
-          {
-            path: '/list/installment',
+            path: path.installment.list,
             element: <InstallmentPage />,
           },
-          {
-            path: '/form/installment',
-            element: <FormInstallment />,
-          },
+          // {
+          //   path: path.installment.form,
+          //   element: <FormInstallment />,
+          // },
         ],
       },
     ],
-    errorElement: <ErrorPage />,
+    errorElement: <NotFound />,
     hydrateFallbackElement: <HydrateFallback />,
   },
   {
     path: '*',
-    element: <ErrorPage />,
+    element: <NotFound />,
   },
 ]);
