@@ -1,10 +1,10 @@
 import { JSX, useState } from 'react';
-import { DropdownItem } from '../ui/dropdown/DropdownItem';
-import { Dropdown } from '../ui/dropdown/Dropdown';
 import { useNavigate } from 'react-router';
 import { useAuthUser } from '../../services/hooks';
-import { logout } from '../../services/sing-out';
 import { path } from '../../services/routes/route-path';
+import { logout } from '../../services/sing-out';
+import { DropdownItem } from '../ui/dropdown/dropdown-item';
+import { Dropdown } from '../ui/dropdown/dropdown';
 
 export default function UserDropdown(): JSX.Element {
   const [isOpen, setIsOpen] = useState(false);
