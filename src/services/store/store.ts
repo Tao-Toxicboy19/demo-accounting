@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { useDispatch } from 'react-redux';
 import authSlice from './features/auth-slice';
+import sidebarSlice from './features/sidebar-slice';
 
 const reducer = {
   authSlice,
+  sidebarSlice,
 };
 
 export const store = configureStore({

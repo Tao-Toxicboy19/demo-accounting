@@ -9,9 +9,11 @@ import {
   fetchTransactionsByUser,
   createTransaction,
   removeTransaction,
+  getIncomeAndExpenseSummary,
 } from '../api';
 import {
   CreateTransactionPayload,
+  IncomeAndExpenseSummary,
   TransactionEntity,
   TransactionIdentifier,
 } from '../types';
@@ -66,5 +68,15 @@ export function useRemoveTransaction(): UseMutationResult<
     onError: (error) => {
       console.error('Failed to delete transaction:', error);
     },
+  });
+}
+
+export function useIncomeAndExpenseSummary(
+  userId: string,
+): UseQueryResult<IncomeAndExpenseSummary, Error> {
+  return useQuery({
+    queryKey: ['income-and-summary'],
+    queryFn: () => getIncomeAndExpenseSummary(userId),
+    enabled: Boolean(userId),
   });
 }

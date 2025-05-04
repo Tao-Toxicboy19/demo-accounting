@@ -22,11 +22,16 @@ export type InstallmentFormInput = Omit<
   startDate: string;
 };
 
-export type CreateInstallmentDto = InstallmentFormInput & {
+export type CreateInstallmentPayload = InstallmentFormInput & {
   user: string;
 };
 
 export type InstallmentIdentifier = {
   id: string;
   user: string;
+};
+
+export type IncomeAndExpenseSummary = {
+  income: number;
+  expense: number;
 };

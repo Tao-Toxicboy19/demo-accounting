@@ -4,6 +4,7 @@ export const path = {
     login: '/authentication/login',
   },
   transaction: {
+    list: '/list/transaction',
     form: '/form/transaction',
   },
   installment: {
