@@ -10,6 +10,7 @@ import {
   fetchInstallmentByUser,
   fetchInstallmentOptions,
   removeInstallment,
+  updateInstallment,
 } from '../api';
 import {
   InstallmentEntity,
@@ -85,6 +86,29 @@ export function useRemoveInstallment(): UseMutationResult<
       });
       queryClient.invalidateQueries({
         queryKey: INSTALLMENT_KEYS.list(userId),
+      });
+    },
+    onError: (error) => {
+      console.error('Failed to delete transaction:', error);
+    },
+  });
+}
+
+export function useUpdateInstallment(): UseMutationResult<
+  InstallmentEntity,
+  Error,
+  CreateInstallmentPayload
+> {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: updateInstallment,
+    onSuccess: (_, { user }) => {
+      queryClient.invalidateQueries({
+        queryKey: INSTALLMENT_KEYS.dropdown(user),
+      });
+      queryClient.invalidateQueries({
+        queryKey: INSTALLMENT_KEYS.list(user),
       });
     },
     onError: (error) => {

@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router';
 import { useAuthUser } from '../../services/hooks';
 import { path } from '../../services/routes/route-path';
 import { logout } from '../../services/sing-out';
-import { DropdownItem } from '../ui/dropdown/dropdown-item';
-import { Dropdown } from '../ui/dropdown/dropdown';
+import Dropdown from '../ui/dropdown/dropdown';
+import DropdownItem from '../ui/dropdown/dropdown-item';
 
 export default function UserDropdown(): JSX.Element {
   const [isOpen, setIsOpen] = useState(false);
