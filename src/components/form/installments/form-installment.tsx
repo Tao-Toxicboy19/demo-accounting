@@ -1,4 +1,4 @@
-import { JSX } from 'react';
+import { JSX, useEffect } from 'react';
 import {
   CreateInstallmentPayload,
   InstallmentFormInput,
@@ -7,24 +7,36 @@ import { useForm } from 'react-hook-form';
 import SpinnerButton from '../../common/spinner-button';
 import Textfield from '../../common/textfield';
 import dayjs from 'dayjs';
-import { useAuthUser, useCreateInstallment } from '../../../services/hooks';
+import {
+  useAuthUser,
+  useCreateInstallment,
+  useUpdateInstallment,
+} from '../../../services/hooks';
+import clsx from 'clsx';
 
 type Props = {
   closeModal: () => void;
+  defaultValues?: Partial<InstallmentFormInput>;
 };
 
-export default function FormInstallment({ closeModal }: Props): JSX.Element {
+export default function FormInstallment({
+  closeModal,
+  defaultValues,
+}: Props): JSX.Element {
   const { uid } = useAuthUser();
   const {
     register,
+    reset,
     handleSubmit,
     formState: { isSubmitting, errors },
   } = useForm<InstallmentFormInput>({
     defaultValues: {
       startDate: dayjs().format('YYYY-MM-DD'),
+      ...defaultValues,
     },
   });
-  const { mutate } = useCreateInstallment();
+  const { mutate: create } = useCreateInstallment();
+  const { mutate: update } = useUpdateInstallment();
 
   const onSubmit = async (data: InstallmentFormInput) => {
     const payload: CreateInstallmentPayload = {
@@ -32,8 +44,21 @@ export default function FormInstallment({ closeModal }: Props): JSX.Element {
       user: uid,
     };
     closeModal();
-    mutate(payload);
+    if (defaultValues) {
+      update(payload);
+    } else {
+      create(payload);
+    }
   };
+
+  useEffect(() => {
+    if (defaultValues) {
+      reset({
+        ...defaultValues,
+        startDate: defaultValues.startDate || dayjs().format('YYYY-MM-DD'),
+      });
+    }
+  }, [defaultValues, reset]);
 
   return (
     <form
@@ -126,7 +151,10 @@ export default function FormInstallment({ closeModal }: Props): JSX.Element {
         </button>
         <SpinnerButton
           isLoading={isSubmitting}
-          className="btn btn-success btn-update-event flex justify-center rounded-lg px-4 py-2.5 text-sm font-medium text-white sm:w-auto bg-brand-500 hover:bg-brand-600 min-w-[134px]"
+          className={clsx(
+            'btn btn-success btn-update-event flex justify-center rounded-lg px-4 py-2.5 text-sm font-medium text-white sm:w-auto bg-brand-500 hover:bg-brand-600',
+            'min-w-[134px] w-full',
+          )}
           type="submit"
         >
           Add Installment

@@ -1,5 +1,8 @@
 import { JSX } from 'react';
-import { InstallmentEntity } from '../../../services/types';
+import {
+  InstallmentEntity,
+  InstallmentFormInput,
+} from '../../../services/types';
 import { TableRow, TableCell } from '../../ui/table';
 import dayjs from 'dayjs';
 import { TrashBinIcon } from '../../../icons';
@@ -9,15 +12,28 @@ type Props = {
   index: number;
   item: InstallmentEntity;
   onDelete: () => void;
+  onSelect: (item: Partial<InstallmentFormInput>) => void;
 };
 
 export default function InstallmentBodyRow({
   index,
   item,
   onDelete,
+  onSelect,
 }: Props): JSX.Element {
+  const handleOpenModel = (): void =>
+    onSelect({
+      id: item._id,
+      name: item.name,
+      totalMonth: item.totalMonth,
+      interestRate: item.interestRate,
+      totalPrice: item.totalPrice,
+      startDate: dayjs(item.startDate).format('YYYY-MM-DD'),
+      note: item.note,
+    });
+
   return (
-    <TableRow key={item._id}>
+    <TableRow key={item._id} onClick={handleOpenModel}>
       <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
         {index + 1}
       </TableCell>

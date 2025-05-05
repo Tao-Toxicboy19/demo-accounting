@@ -10,6 +10,7 @@ import {
   createTransaction,
   removeTransaction,
   getIncomeAndExpenseSummary,
+  updateTransaction,
 } from '../api';
 import {
   CreateTransactionPayload,
@@ -78,5 +79,25 @@ export function useIncomeAndExpenseSummary(
     queryKey: ['income-and-summary'],
     queryFn: () => getIncomeAndExpenseSummary(userId),
     enabled: Boolean(userId),
+  });
+}
+
+export function useUpdateTransaction(): UseMutationResult<
+  TransactionEntity,
+  Error,
+  CreateTransactionPayload
+> {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: updateTransaction,
+    onSuccess: (_, { user }) => {
+      queryClient.invalidateQueries({
+        queryKey: [TRANSACTION_QUERY_KEY, user],
+      });
+    },
+    onError: (error) => {
+      console.error('Failed to delete transaction:', error);
+    },
   });
 }

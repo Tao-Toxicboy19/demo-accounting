@@ -3,8 +3,8 @@ import { JSX, useState } from 'react';
 import Chart from 'react-apexcharts';
 import { MoreDotIcon } from '../../icons';
 import Icons from '../common/icons';
-import { Dropdown } from '../ui/dropdown/dropdown';
-import { DropdownItem } from '../ui/dropdown/dropdown-item';
+import Dropdown from '../ui/dropdown/dropdown';
+import DropdownItem from '../ui/dropdown/dropdown-item';
 
 export default function MonthlyTarget(): JSX.Element {
   const series = [75.55];

@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import React, { JSX } from 'react';
 import GenericModalTriggerButton from './generic-moda-trigger-button';
 
-interface Props {
+type Props = {
   title: string;
   children: React.ReactNode;
   className?: string;
@@ -10,7 +10,7 @@ interface Props {
   buttonLabel?: string;
   showModal?: boolean;
   renderModalContent?: (close: () => void) => JSX.Element;
-}
+};
 
 export default function Card({
   title,
