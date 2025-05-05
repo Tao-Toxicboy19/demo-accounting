@@ -1,7 +1,8 @@
 import type React from 'react';
+import { JSX } from 'react';
 import { Link } from 'react-router';
 
-interface DropdownItemProps {
+type Props = {
   tag?: 'a' | 'button';
   to?: string;
   onClick?: () => void;
@@ -9,9 +10,9 @@ interface DropdownItemProps {
   baseClassName?: string;
   className?: string;
   children: React.ReactNode;
-}
+};
 
-export const DropdownItem: React.FC<DropdownItemProps> = ({
+export default function DropdownItem({
   tag = 'button',
   to,
   onClick,
@@ -19,7 +20,7 @@ export const DropdownItem: React.FC<DropdownItemProps> = ({
   baseClassName = 'block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900',
   className = '',
   children,
-}) => {
+}: Props): JSX.Element {
   const combinedClasses = `${baseClassName} ${className}`.trim();
 
   const handleClick = (event: React.MouseEvent) => {
@@ -43,4 +44,4 @@ export const DropdownItem: React.FC<DropdownItemProps> = ({
       {children}
     </button>
   );
-};
+}

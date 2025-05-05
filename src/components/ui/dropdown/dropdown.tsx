@@ -1,19 +1,19 @@
 import type React from 'react';
-import { useEffect, useRef } from 'react';
+import { JSX, useEffect, useRef } from 'react';
 
-interface DropdownProps {
+type Props = {
   isOpen: boolean;
   onClose: () => void;
   children: React.ReactNode;
   className?: string;
-}
+};
 
-export const Dropdown: React.FC<DropdownProps> = ({
+export default function Dropdown({
   isOpen,
   onClose,
   children,
   className = '',
-}) => {
+}: Props): JSX.Element | null {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -43,4 +43,4 @@ export const Dropdown: React.FC<DropdownProps> = ({
       {children}
     </div>
   );
-};
+}

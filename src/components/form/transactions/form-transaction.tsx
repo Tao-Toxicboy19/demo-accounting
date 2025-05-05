@@ -1,8 +1,9 @@
-import { JSX, useState } from 'react';
+import { JSX, useEffect, useState } from 'react';
 import {
   useAuthUser,
   useCreateTransaction,
   useInstallmentDropdown,
+  useUpdateTransaction,
 } from '../../../services/hooks';
 import dayjs from 'dayjs';
 import { useForm } from 'react-hook-form';
@@ -15,30 +16,39 @@ import Textfield from '../../common/textfield';
 import Label from '../../ui/label';
 import Select from '../../ui/Select';
 import SpinnerButton from '../../common/spinner-button';
+import clsx from 'clsx';
 
 type Props = {
   closeModal: () => void;
+  defaultValues?: Partial<TransactionFormInput>;
 };
 
-export default function FormTransaction({ closeModal }: Props): JSX.Element {
+export default function FormTransaction({
+  closeModal,
+  defaultValues,
+}: Props): JSX.Element {
   const { uid } = useAuthUser();
-  const [transactionType, setTransactionType] =
-    useState<TransactionType>('income');
+  const [transactionType, setTransactionType] = useState<TransactionType>(
+    defaultValues?.type || 'income',
+  );
   const {
     register,
     handleSubmit,
+    reset,
+    watch,
+    setValue,
     formState: { isSubmitting, errors },
   } = useForm<TransactionFormInput>({
     defaultValues: {
       date: dayjs().format('YYYY-MM-DD'),
       type: 'expense',
+      ...defaultValues,
     },
   });
   const { data } = useInstallmentDropdown(
     uid,
     transactionType === 'installment',
   );
-  const { mutate } = useCreateTransaction();
 
   const transactionTypeOptions = {
     Income: 'income',
@@ -46,13 +56,39 @@ export default function FormTransaction({ closeModal }: Props): JSX.Element {
     Installment: 'installment',
   };
 
+  useEffect(() => {
+    if (defaultValues) {
+      reset({
+        ...defaultValues,
+        date: defaultValues.date || dayjs().format('YYYY-MM-DD'),
+      });
+    }
+  }, [defaultValues, reset]);
+
+  const selectedInstallmentId = watch('installmentId');
+
+  useEffect(() => {
+    if (transactionType !== 'installment' || !data) return;
+    const matched = data.find((item) => item.value === selectedInstallmentId);
+    if (matched) {
+      setValue('title', matched.label);
+    }
+  }, [selectedInstallmentId, data, transactionType, setValue]);
+
+  const { mutate: create } = useCreateTransaction();
+  const { mutate: update } = useUpdateTransaction();
+
   const onSubmit = async (data: TransactionFormInput) => {
     const payload: CreateTransactionPayload = {
       ...data,
       user: uid,
     };
     closeModal();
-    mutate(payload);
+    if (defaultValues) {
+      update(payload);
+    } else {
+      create(payload);
+    }
   };
 
   return (
@@ -178,7 +214,10 @@ export default function FormTransaction({ closeModal }: Props): JSX.Element {
         </button>
         <SpinnerButton
           isLoading={isSubmitting}
-          className="btn btn-success btn-update-event flex justify-center rounded-lg px-4 py-2.5 text-sm font-medium text-white sm:w-auto bg-brand-500 hover:bg-brand-600 min-w-[134px]"
+          className={clsx(
+            'btn btn-success btn-update-event flex justify-center rounded-lg px-4 py-2.5 text-sm font-medium text-white sm:w-auto bg-brand-500 hover:bg-brand-600',
+            'min-w-[134px] w-full',
+          )}
           type="submit"
         >
           Add Transaction

@@ -11,6 +11,7 @@ const ENDPOINTS = {
   CREATE: 'installments/create',
   LIST: 'installments/list',
   DELETE: 'installments/delete',
+  UPDATE: 'installments/update',
 };
 
 export async function fetchInstallmentOptions(
@@ -42,5 +43,15 @@ export async function removeInstallment(
   payload: InstallmentIdentifier,
 ): Promise<void> {
   const res = await httpClient.post<void>(ENDPOINTS.DELETE, payload);
+  return res.data;
+}
+
+export async function updateInstallment(
+  payload: CreateInstallmentPayload,
+): Promise<InstallmentEntity> {
+  const res = await httpClient.post<InstallmentEntity>(
+    ENDPOINTS.UPDATE,
+    payload,
+  );
   return res.data;
 }
