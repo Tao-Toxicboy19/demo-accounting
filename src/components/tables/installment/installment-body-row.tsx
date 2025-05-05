@@ -30,6 +30,7 @@ export default function InstallmentBodyRow({
       totalPrice: item.totalPrice,
       startDate: dayjs(item.startDate).format('YYYY-MM-DD'),
       note: item.note,
+      paidMonths: item.paidMonths,
     });
 
   return (
