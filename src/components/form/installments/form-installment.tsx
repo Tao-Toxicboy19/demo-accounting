@@ -82,17 +82,31 @@ export default function FormInstallment({
             {...register('name', { required: true })}
           />
         </div>
-        <div className="mt-6">
-          <Textfield
-            id="totalMonth"
-            label="Total Month"
-            error={!!errors?.totalMonth}
-            type="number"
-            {...register('totalMonth', {
-              valueAsNumber: true,
-              required: true,
-            })}
-          />
+        <div className="flex gap-x-5 w-full mt-6">
+          <div className="w-full">
+            <Textfield
+              id="paidMonths"
+              label="Paid Months"
+              error={!!errors?.paidMonths}
+              type="number"
+              {...register('paidMonths', {
+                valueAsNumber: true,
+                required: true,
+              })}
+            />
+          </div>
+          <div className="w-full">
+            <Textfield
+              id="totalMonth"
+              label="Total Month"
+              error={!!errors?.totalMonth}
+              type="number"
+              {...register('totalMonth', {
+                valueAsNumber: true,
+                required: true,
+              })}
+            />
+          </div>
         </div>
         <div className="flex gap-x-5 w-full mt-6">
           <div className="w-full">

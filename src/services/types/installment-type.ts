@@ -17,7 +17,7 @@ export type InstallmentOption = {
 
 export type InstallmentFormInput = Omit<
   InstallmentEntity,
-  '_id' | 'user' | 'paidMonths' | 'startDate'
+  '_id' | 'user' | 'startDate'
 > & {
   id?: string;
   startDate: string;
