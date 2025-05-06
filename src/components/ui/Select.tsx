@@ -1,12 +1,12 @@
 import clsx from 'clsx';
 import { JSX } from 'react';
 
-interface Option {
+type Option = {
   value: string;
   label: string;
-}
+};
 
-type SelectProps = {
+type Props = {
   options: Option[];
   label?: string;
   placeholder?: string;
@@ -17,11 +17,11 @@ type SelectProps = {
 export default function Select({
   options,
   label,
-  placeholder = 'Select an option',
+  placeholder,
   error,
   className = '',
   ...rest
-}: SelectProps): JSX.Element {
+}: Props): JSX.Element {
   return (
     <div className={clsx(className)}>
       {label && (
