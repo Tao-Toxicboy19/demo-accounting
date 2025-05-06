@@ -1,4 +1,6 @@
-export const categories = [
+import { Options } from '../types';
+
+export const categories: Options[] = [
   { value: 'snack', label: 'ขนม' },
   { value: 'drink', label: 'เครื่องดื่ม' },
   { value: 'food', label: 'อาหาร' },
@@ -22,3 +24,9 @@ export const categories = [
   { value: 'appliance', label: 'ผ่อนเครื่องใช้ไฟฟ้า' },
   { value: 'other_installment', label: 'ผ่อนชำระอื่น ๆ' },
 ];
+
+export const transactionTypeOptions = {
+  Income: 'income',
+  Expense: 'expense',
+  Installment: 'installment',
+};
