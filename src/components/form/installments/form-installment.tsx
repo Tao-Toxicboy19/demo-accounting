@@ -91,7 +91,6 @@ export default function FormInstallment({
               type="number"
               {...register('paidMonths', {
                 valueAsNumber: true,
-                required: true,
               })}
             />
           </div>
