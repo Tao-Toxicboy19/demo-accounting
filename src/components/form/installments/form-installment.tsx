@@ -32,6 +32,7 @@ export default function FormInstallment({
   } = useForm<InstallmentFormInput>({
     defaultValues: {
       startDate: dayjs().format('YYYY-MM-DD'),
+      paidMonths: 0,
       ...defaultValues,
     },
   });
