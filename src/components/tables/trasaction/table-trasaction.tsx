@@ -11,10 +11,19 @@ import Modal from '../../ui/modal';
 import { useModal } from '../../../services/hooks/use-modal';
 import FormTransaction from '../../form/transactions/form-transaction';
 import { CreateTransactionPayload } from '../../../services/types';
+import { useSelector } from 'react-redux';
+import { paginationSelector } from '../../../services/store';
 
 export default function TableTransaction(): JSX.Element {
   const { uid } = useAuthUser();
-  const { data } = useTransactionsByUser(uid);
+  const limit = 7;
+  const pageReducer = useSelector(paginationSelector);
+
+  const { data } = useTransactionsByUser({
+    user: uid,
+    page: pageReducer.page,
+    limit,
+  });
   const { mutate } = useRemoveTransaction();
   const { isOpen, openModal, closeModal } = useModal();
   const [selectedTransaction, setSelectedTransaction] =
@@ -26,10 +35,10 @@ export default function TableTransaction(): JSX.Element {
         <Table>
           <TransactionHeaderRow />
           <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
-            {data?.map((item, index) => (
+            {data?.items.map((item, index) => (
               <TransactionBodyRow
                 key={item._id}
-                index={index}
+                index={index + (pageReducer.page - 1) * limit}
                 item={item}
                 onSelect={(item) => {
                   setSelectedTransaction(item);

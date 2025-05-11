@@ -29,3 +29,13 @@ export type TransactionIdentifier = {
 };
 
 export type TransactionType = 'income' | 'expense' | 'installment';
+export type TransactionsLimitPage = {
+  user: string;
+  page: number;
+  limit: number;
+};
+export type ResponseTransaction = {
+  items: TransactionEntity[];
+  total: number;
+  totalPage: number;
+};
