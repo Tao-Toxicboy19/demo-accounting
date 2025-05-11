@@ -8,6 +8,8 @@ import {
   CreateTransactionPayload,
   TransactionEntity,
 } from '../../../services/types';
+import { getCategoryLabel } from '../../../services/utils';
+import { categories } from '../../../services/constants';
 
 type Props = {
   index: number;
@@ -31,6 +33,7 @@ export default function TransactionBodyRow({
       note: item.note,
       date: dayjs(item.date).format('YYYY-MM-DD'),
       installmentId: item.installmentId,
+      category: item.category,
     });
 
   return (
@@ -52,11 +55,14 @@ export default function TransactionBodyRow({
                 : 'error'
           }
         >
-          {item.type}
+          {item.type.charAt(0).toUpperCase() + item.type.slice(1)}
         </Badge>
       </TableCell>
       <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
         {item.amount}
+      </TableCell>
+      <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+        {getCategoryLabel(item.category, categories)}
       </TableCell>
       <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
         {dayjs(item.date).format('DD/MM/YYYY')}

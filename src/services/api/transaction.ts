@@ -1,8 +1,10 @@
 import {
   CreateTransactionPayload,
   IncomeAndExpenseSummary,
+  ResponseTransaction,
   TransactionEntity,
   TransactionIdentifier,
+  TransactionsLimitPage,
 } from '../types';
 import { httpClient } from './http-client';
 
@@ -15,11 +17,12 @@ const ENDPOINTS = {
 };
 
 export async function fetchTransactionsByUser(
-  userId: string,
-): Promise<TransactionEntity[]> {
-  const res = await httpClient.post<TransactionEntity[]>(ENDPOINTS.LIST, {
-    user: userId,
-  });
+  payload: TransactionsLimitPage,
+): Promise<ResponseTransaction> {
+  const res = await httpClient.post<ResponseTransaction>(
+    ENDPOINTS.LIST,
+    payload,
+  );
   return res.data;
 }
 

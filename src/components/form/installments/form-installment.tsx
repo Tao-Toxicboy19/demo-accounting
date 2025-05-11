@@ -32,6 +32,7 @@ export default function FormInstallment({
   } = useForm<InstallmentFormInput>({
     defaultValues: {
       startDate: dayjs().format('YYYY-MM-DD'),
+      paidMonths: 0,
       ...defaultValues,
     },
   });
@@ -91,7 +92,6 @@ export default function FormInstallment({
               type="number"
               {...register('paidMonths', {
                 valueAsNumber: true,
-                required: true,
               })}
             />
           </div>

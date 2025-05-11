@@ -17,6 +17,10 @@ import Label from '../../ui/label';
 import Select from '../../ui/Select';
 import SpinnerButton from '../../common/spinner-button';
 import clsx from 'clsx';
+import {
+  categories,
+  transactionTypeOptions,
+} from '../../../services/constants';
 
 type Props = {
   closeModal: () => void;
@@ -49,12 +53,6 @@ export default function FormTransaction({
     uid,
     transactionType === 'installment',
   );
-
-  const transactionTypeOptions = {
-    Income: 'income',
-    Expense: 'expense',
-    Installment: 'installment',
-  };
 
   useEffect(() => {
     if (defaultValues) {
@@ -165,21 +163,31 @@ export default function FormTransaction({
             ))}
           </div>
         </div>
-        <div className="mt-6">
-          <Textfield
-            id="amount"
-            label="Amount"
-            error={!!errors?.amount}
-            type="number"
-            {...register('amount', {
-              required: true,
-              valueAsNumber: true,
-              validate: (value) =>
-                (Number.isFinite(value) &&
-                  /^\d+(\.\d{1,2})?$/.test(value.toString())) ||
-                'กรุณากรอกไม่เกิน 2 ตำแหน่ง',
-            })}
-          />
+        <div className="mt-6 w-full flex gap-x-5">
+          <div className="w-full">
+            <Textfield
+              id="amount"
+              label="Amount"
+              error={!!errors?.amount}
+              type="number"
+              {...register('amount', {
+                required: true,
+                valueAsNumber: true,
+                validate: (value) =>
+                  (Number.isFinite(value) &&
+                    /^\d+(\.\d{1,2})?$/.test(value.toString())) ||
+                  'กรุณากรอกไม่เกิน 2 ตำแหน่ง',
+              })}
+            />
+          </div>
+          <div className="w-full">
+            <Label>Categories</Label>
+            <Select
+              options={categories}
+              className="dark:bg-dark-900"
+              {...register('category', { required: true })}
+            />
+          </div>
         </div>
         <div className="mt-6">
           <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
