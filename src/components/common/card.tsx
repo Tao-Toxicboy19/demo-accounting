@@ -1,6 +1,15 @@
 import clsx from 'clsx';
 import React, { JSX } from 'react';
 import GenericModalTriggerButton from './generic-moda-trigger-button';
+import Button from './button';
+import { ChevronRight, ChevronLeft } from 'lucide-react';
+import {
+  nextPage,
+  paginationSelector,
+  prevPage,
+  useAppDispatch,
+} from '../../services/store';
+import { useSelector } from 'react-redux';
 
 type Props = {
   title: string;
@@ -21,6 +30,9 @@ export default function Card({
   showModal = true,
   renderModalContent,
 }: Props): JSX.Element {
+  const dispatch = useAppDispatch();
+  const pageReducer = useSelector(paginationSelector);
+
   return (
     <div
       className={clsx(
@@ -29,23 +41,37 @@ export default function Card({
       )}
     >
       {/* Card Header */}
-      <div className="px-6 py-5 flex gap-x-5 items-center">
-        <div>
-          <h3 className="text-base font-medium text-gray-800 dark:text-white/90">
-            {title}
-          </h3>
-          {desc && (
-            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-              {desc}
-            </p>
+      <div className="px-6 pt-5 flex gap-x-5 items-center justify-between">
+        <div className="flex gap-x-5 items-center">
+          <div>
+            <h3 className="text-base font-medium text-gray-800 dark:text-white/90">
+              {title}
+            </h3>
+            {desc && (
+              <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                {desc}
+              </p>
+            )}
+          </div>
+          {showModal && renderModalContent && (
+            <GenericModalTriggerButton
+              buttonLabel={buttonLabel}
+              renderModalContent={renderModalContent}
+            />
           )}
         </div>
-        {showModal && renderModalContent && (
-          <GenericModalTriggerButton
-            buttonLabel={buttonLabel}
-            renderModalContent={renderModalContent}
-          />
-        )}
+        <div className="flex gap-x-2 items-center">
+          <Button onClick={() => dispatch(prevPage())}>
+            <ChevronLeft className="text-gray-500" />
+          </Button>
+          <div>
+            <span>{pageReducer.page}</span> /{' '}
+            <span>{pageReducer.totalPage}</span>
+          </div>
+          <Button onClick={() => dispatch(nextPage())}>
+            <ChevronRight className="text-gray-500" />
+          </Button>
+        </div>
       </div>
 
       {/* Card Body */}

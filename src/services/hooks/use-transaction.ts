@@ -15,20 +15,34 @@ import {
 import {
   CreateTransactionPayload,
   IncomeAndExpenseSummary,
+  ResponseTransaction,
   TransactionEntity,
   TransactionIdentifier,
+  TransactionsLimitPage,
 } from '../types';
+import { setTotalPage, useAppDispatch } from '../store';
 
 const TRANSACTION_QUERY_KEY = 'transactions';
 
 export function useTransactionsByUser(
-  userId: string,
-): UseQueryResult<TransactionEntity[], Error> {
-  return useQuery({
-    queryKey: [TRANSACTION_QUERY_KEY, userId],
-    queryFn: () => fetchTransactionsByUser(userId),
-    enabled: Boolean(userId),
+  payload: TransactionsLimitPage,
+): UseQueryResult<ResponseTransaction, Error> {
+  const dispatch = useAppDispatch();
+
+  const res = useQuery({
+    queryKey: [
+      TRANSACTION_QUERY_KEY,
+      payload.user,
+      payload.page,
+      payload.limit,
+    ],
+    queryFn: () => fetchTransactionsByUser(payload),
+    enabled: Boolean(payload.user),
   });
+
+  if (res.isSuccess) dispatch(setTotalPage(res.data.totalPage));
+
+  return res;
 }
 
 export function useCreateTransaction(): UseMutationResult<
