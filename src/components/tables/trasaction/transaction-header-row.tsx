@@ -8,6 +8,7 @@ const TABLE_HEADERS: string[] = [
   'Type',
   'Amount',
   'Date',
+  'Categories',
   'Note',
   'Actions',
 ];
