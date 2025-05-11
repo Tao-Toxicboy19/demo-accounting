@@ -11,7 +11,7 @@ import Icons from '../../common/icons';
 type Props = {
   index: number;
   item: InstallmentEntity;
-  onDelete: () => void;
+  onDelete: (event: React.MouseEvent<HTMLButtonElement>) => void;
   onSelect: (item: Partial<InstallmentFormInput>) => void;
 };
 

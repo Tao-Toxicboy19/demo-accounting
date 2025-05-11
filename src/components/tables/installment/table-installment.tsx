@@ -31,7 +31,10 @@ export default function TableInstallment(): JSX.Element {
                 key={item._id}
                 index={index}
                 item={item}
-                onDelete={() => mutate({ user: uid, id: item._id })}
+                onDelete={(evnet) => {
+                  evnet.stopPropagation();
+                  mutate({ user: uid, id: item._id });
+                }}
                 onSelect={(item) => {
                   setSelectedInstallment(item);
                   openModal();
