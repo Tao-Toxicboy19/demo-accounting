@@ -1,17 +1,9 @@
 import clsx from 'clsx';
 import React, { JSX } from 'react';
 import GenericModalTriggerButton from './generic-moda-trigger-button';
-import Button from './button';
-import { ChevronRight, ChevronLeft } from 'lucide-react';
-import {
-  nextPage,
-  paginationSelector,
-  prevPage,
-  useAppDispatch,
-} from '../../services/store';
-import { useSelector } from 'react-redux';
+import PaginationControls from './pagination-controller';
 
-type Props = {
+type BaseProps = {
   title: string;
   children: React.ReactNode;
   className?: string;
@@ -21,6 +13,24 @@ type Props = {
   renderModalContent?: (close: () => void) => JSX.Element;
 };
 
+type WithPagination = {
+  isShowSkipPage: true;
+  page: number;
+  totalPage: number;
+  prevPage: () => void;
+  nextPage: () => void;
+};
+
+type WithoutPagination = {
+  isShowSkipPage?: false;
+  page?: undefined;
+  totalPage?: undefined;
+  prevPage?: undefined;
+  nextPage?: undefined;
+};
+
+type Props = BaseProps & (WithPagination | WithoutPagination);
+
 export default function Card({
   title,
   children,
@@ -28,11 +38,13 @@ export default function Card({
   desc = '',
   buttonLabel,
   showModal = true,
+  page,
+  totalPage,
+  isShowSkipPage = false,
+  prevPage,
+  nextPage,
   renderModalContent,
 }: Props): JSX.Element {
-  const dispatch = useAppDispatch();
-  const pageReducer = useSelector(paginationSelector);
-
   return (
     <div
       className={clsx(
@@ -44,7 +56,7 @@ export default function Card({
       <div className="px-6 pt-5 flex gap-x-5 items-center justify-between">
         <div className="flex gap-x-5 items-center">
           <div>
-            <h3 className="text-base font-medium text-gray-800 dark:text-white/90">
+            <h3 className="hidden lg:block text-base font-medium text-gray-800 dark:text-white/90">
               {title}
             </h3>
             {desc && (
@@ -60,23 +72,21 @@ export default function Card({
             />
           )}
         </div>
-        <div className="flex gap-x-2 items-center">
-          <Button onClick={() => dispatch(prevPage())}>
-            <ChevronLeft className="text-gray-500" />
-          </Button>
-          <div>
-            <span>{pageReducer.page}</span> /{' '}
-            <span>{pageReducer.totalPage}</span>
-          </div>
-          <Button onClick={() => dispatch(nextPage())}>
-            <ChevronRight className="text-gray-500" />
-          </Button>
-        </div>
+        {isShowSkipPage && page && totalPage && prevPage && nextPage && (
+          <PaginationControls
+            page={page}
+            totalPage={totalPage}
+            prevPage={prevPage}
+            nextPage={nextPage}
+          />
+        )}
       </div>
 
       {/* Card Body */}
-      <div className="p-4 border-t border-gray-100 dark:border-gray-800 sm:p-6">
-        <div className="space-y-6">{children}</div>
+      <div className="p-4 mt-3 border-t border-gray-100 dark:border-gray-800 sm:p-6">
+        <div className="space-y-6 overflow-y-auto max-h-[calc(100vh-380px)]">
+          {children}
+        </div>
       </div>
     </div>
   );

@@ -21,13 +21,11 @@ export const paginationSlice = createSlice({
     setPage: (state: PaginationState, action: PayloadAction<number>) => {
       state.page = action.payload;
     },
-    nextPage: (state: PaginationState) => {
-      state.page += 1;
-      console.log(state.page);
+    nextPage: (state) => {
+      state.page = Math.min(state.page + 1, state.totalPage);
     },
-    prevPage: (state: PaginationState) => {
+    prevPage: (state) => {
       state.page = Math.max(1, state.page - 1);
-      console.log(state.page);
     },
   },
 });
