@@ -16,7 +16,7 @@ import { paginationSelector } from '../../../services/store';
 
 export default function TableTransaction(): JSX.Element {
   const { uid } = useAuthUser();
-  const limit = 7;
+  const limit = 20;
   const pageReducer = useSelector(paginationSelector);
 
   const { data } = useTransactionsByUser({
