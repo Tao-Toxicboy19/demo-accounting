@@ -23,6 +23,7 @@ import {
 import { setTotalPage, useAppDispatch } from '../store';
 
 const TRANSACTION_QUERY_KEY = 'transactions';
+const INCOME_AND_SUMMARY_KEY = 'income-and-summary';
 
 export function useTransactionsByUser(
   payload: TransactionsLimitPage,
@@ -79,6 +80,9 @@ export function useRemoveTransaction(): UseMutationResult<
       queryClient.invalidateQueries({
         queryKey: [TRANSACTION_QUERY_KEY, user],
       });
+      queryClient.invalidateQueries({
+        queryKey: [INCOME_AND_SUMMARY_KEY, user],
+      });
     },
     onError: (error) => {
       console.error('Failed to delete transaction:', error);
@@ -90,7 +94,7 @@ export function useIncomeAndExpenseSummary(
   userId: string,
 ): UseQueryResult<IncomeAndExpenseSummary, Error> {
   return useQuery({
-    queryKey: ['income-and-summary'],
+    queryKey: [INCOME_AND_SUMMARY_KEY],
     queryFn: () => getIncomeAndExpenseSummary(userId),
     enabled: Boolean(userId),
   });

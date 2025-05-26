@@ -14,8 +14,6 @@ export default function AppHeader(): JSX.Element {
   const sidebarReducer = useSelector(sidebarSelector);
   const dispatch = useAppDispatch();
 
-  // const { isMobileOpen, toggleSidebar, toggleMobileSidebar } = useSidebar();
-
   const handleToggle = () => {
     if (window.innerWidth >= 1024) {
       dispatch(toggleSidebar());
