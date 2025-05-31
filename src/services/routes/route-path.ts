@@ -11,4 +11,8 @@ export const path = {
     list: '/list/installment',
     form: '/form/installment',
   },
+  savingGoal: {
+    list: '/list/saving-goal',
+    form: '/form/saving-goal',
+  },
 };

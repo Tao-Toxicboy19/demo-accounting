@@ -21,11 +21,13 @@ export type TransactionFormInput = Omit<
 
 export type CreateTransactionPayload = TransactionFormInput & {
   user: string;
+  id?: string;
 };
 
 export type TransactionIdentifier = {
   id: string;
   user: string;
+  transactionEntity?: TransactionEntity;
 };
 
 export type TransactionType = 'income' | 'expense' | 'installment';

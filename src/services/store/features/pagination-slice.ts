@@ -3,11 +3,13 @@ import { RootState } from '../store';
 
 type PaginationState = {
   page: number;
+  limit: number;
   totalPage: number;
 };
 
 const initialState: PaginationState = {
   page: 1,
+  limit: 10,
   totalPage: 1,
 };
 

@@ -10,7 +10,6 @@ export default function InstallmentPage(): JSX.Element {
       <PageBreadcrumb pageTitle="Installment" />
       <div className="space-y-6">
         <Card
-          title="Installment"
           showModal
           buttonLabel="Add Installment +"
           renderModalContent={(close) => <FormInstallment closeModal={close} />}

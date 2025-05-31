@@ -13,6 +13,7 @@ import {
   ListIcon,
   PageIcon,
   TableIcon,
+  TaskIcon,
 } from '../icons';
 import { path } from '../services/routes/route-path';
 import {
@@ -43,6 +44,11 @@ const navItems: NavItem[] = [
     icon: <Icons path={CalenderIcon} />,
     name: 'Installments',
     path: path.installment.list,
+  },
+  {
+    icon: <Icons path={TaskIcon} />,
+    name: 'Saving Goals',
+    path: path.savingGoal.list,
   },
   {
     icon: <Icons path={ListIcon} />,
