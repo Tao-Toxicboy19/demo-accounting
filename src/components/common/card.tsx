@@ -1,10 +1,10 @@
 import clsx from 'clsx';
 import React, { JSX } from 'react';
-import GenericModalTriggerButton from './generic-moda-trigger-button';
+import GenericModalTriggerButton from './generic-modal-trigger-button';
 import PaginationControls from './pagination-controller';
 
 type BaseProps = {
-  title: string;
+  title?: string;
   children: React.ReactNode;
   className?: string;
   desc?: string;
@@ -32,7 +32,7 @@ type WithoutPagination = {
 type Props = BaseProps & (WithPagination | WithoutPagination);
 
 export default function Card({
-  title,
+  title = '',
   children,
   className = '',
   desc = '',

@@ -1,7 +1,6 @@
 import { JSX } from 'react';
-import Card from '../components/common/card';
 import PageBreadcrumb from '../components/common/page-bread-crumb';
-import FormTransaction from '../components/form/transactions/form-transaction';
+import Card from '../components/common/card';
 import {
   nextPage,
   paginationSelector,
@@ -10,19 +9,20 @@ import {
 } from '../services/store';
 import { useSelector } from 'react-redux';
 import TableTransactions from '../components/tables/transactions/table-transactions';
+import FormSavingGoals from '../components/form/saving-goal/form-saving-goals';
 
-export default function TransactionPage(): JSX.Element {
+export default function SavingGoalPage(): JSX.Element {
   const dispatch = useAppDispatch();
   const pageReducer = useSelector(paginationSelector);
 
   return (
     <>
-      <PageBreadcrumb pageTitle="Transactions" />
+      <PageBreadcrumb pageTitle="Saving Goals" />
       <div className="space-y-6">
         <Card
           showModal
-          buttonLabel="Add Transaction +"
-          renderModalContent={(close) => <FormTransaction closeModal={close} />}
+          buttonLabel="Add Saving Goal +"
+          renderModalContent={(close) => <FormSavingGoals closeModal={close} />}
           isShowSkipPage
           page={pageReducer.page}
           totalPage={pageReducer.totalPage}

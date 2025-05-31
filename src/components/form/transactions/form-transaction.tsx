@@ -21,6 +21,7 @@ import {
   categories,
   transactionTypeOptions,
 } from '../../../services/constants';
+import { v4 as uuidv4 } from 'uuid';
 
 type Props = {
   closeModal: () => void;
@@ -85,7 +86,7 @@ export default function FormTransaction({
     if (defaultValues) {
       update(payload);
     } else {
-      create(payload);
+      create({ ...payload, id: uuidv4() });
     }
   };
 
